@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Django storage top page</title>
+        <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+        <!-- <script type="text/javascript" src="{% static 'js/sample.js' %}"></script> -->
+    </head>
+    <body>
+        <h1 id="title">Django storage top page</h1>
+        <div>
+        <a id="upload" href="{% url 'upload' %}">アップロードページに移動</a>
+        </div>
+    </body>
+</html>
