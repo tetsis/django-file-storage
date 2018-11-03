@@ -10,7 +10,13 @@
     <body>
         <h1 id="title">Django storage upload page</h1>
         <div>
-        <a id="index" href="{% url 'index' %}">トップページに移動</a>
+            <input type="file" name="file">
+        </div>
+        <div>
+            <button type="button" id="upload">アップロード</button>
+        </div>
+        <div>
+            <a id="index" href="{% url 'index' %}">トップページに移動</a>
         </div>
     </body>
 </html>

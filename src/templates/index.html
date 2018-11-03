@@ -9,8 +9,27 @@
     </head>
     <body>
         <h1 id="title">Django storage top page</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ファイル名</th>
+                    <th>アップロード日時</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.upload_time }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         <div>
-        <a id="upload" href="{% url 'upload' %}">アップロードページに移動</a>
+            <button type="button" id="all_download">全ダウンロード</button>
+        </div>
+        <div>
+            <a id="upload" href="{% url 'upload' %}">アップロードページに移動</a>
         </div>
     </body>
 </html>
