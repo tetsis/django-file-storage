@@ -25,6 +25,20 @@
             {% endfor %}
             </tbody>
         </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>オブジェクト名</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for file in file_list %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         <div>
             <button type="button" id="all_download">全ダウンロード</button>
         </div>
