@@ -19,22 +19,8 @@
             <tbody>
             {% for file in files %}
                 <tr>
-                    <td>{{ file.name }}</td>
+                    <td><a href="https://storage.googleapis.com/{{ bucket_name }}/media/{{ file.name }}" target="_blank">{{ file.name }}</a></td>
                     <td>{{ file.upload_time }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th>オブジェクト名</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for file in file_list %}
-                <tr>
-                    <td>{{ file.name }}</td>
                 </tr>
             {% endfor %}
             </tbody>

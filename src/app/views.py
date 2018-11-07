@@ -14,23 +14,24 @@ def list_blobs(bucket_name):
 
     return blobs
 
-def upload_blob(bucket_name, file_name):
+def upload_blob(bucket_name, source_file_name, destination_blob_name):
     """Uploads a file to the bucket."""
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
-    blob = bucket.blob(file_name)
+    blob = bucket.blob(destination_blob_name)
 
-    blob.upload_from_filename(file_name)
+    blob.upload_from_filename(source_file_name)
 
 def index(request):
     files = File.objects.all()
 
     bucket_name = os.environ.get('BUCKET_NAME', 'bucket_name')
-    file_list = list_blobs(bucket_name)
+    #file_list = list_blobs(bucket_name)
 
     context = {
         'files': files,
-        'file_list': file_list,
+        #'file_list': file_list,
+        'bucket_name': bucket_name,
     }
     return render(request, 'index.html', context)
 
@@ -46,21 +47,26 @@ def upload_api(request):
         except KeyError:
             return JsonResponse({'data': 'failed'})
 
-        file_name = datetime.now().strftime('%Y%m%d-%H%M%S-') + file.name
-        file_path = os.path.join('/tmp', file_name).encode('utf-8')
-        destination = open(file_path, 'wb')
+        try:
+            file_name = datetime.now().strftime('%Y%m%d-%H%M%S-') + file.name
+            file_path = os.path.join('/tmp', file_name)
+            destination = open(file_path, 'wb')
 
-        # ファイルを一時保存
-        for chunk in file.chunks():
-            destination.write(chunk)
+            # ファイルを一時保存
+            for chunk in file.chunks():
+                destination.write(chunk)
 
-        # GCSにアップロード
-        bucket_name = os.environ.get('BUCKET_NAME', 'bucket_name')
-        upload_blob(bucket_name, file_path)
+            # GCSにアップロード
+            bucket_name = os.environ.get('BUCKET_NAME', 'bucket_name')
+            upload_blob(bucket_name, file_path, 'media/' + file_name)
 
-        # DBに登録
-        new_file = File(name=file_name, upload_time=datetime.now())
-        new_file.save()
+            # DBに登録
+            new_file = File(name=file_name, upload_time=datetime.now())
+            new_file.save()
 
-        # ファイルを削除
-        os.remove(file_path)
+            # ファイルを削除
+            os.remove(file_path)
+
+            return JsonResponse({'data': 'success'})
+        except:
+            return JsonResponse({'data': 'failed'})
