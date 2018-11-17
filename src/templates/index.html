@@ -19,15 +19,14 @@
             <tbody>
             {% for file in files %}
                 <tr>
-                    <td><a href="https://storage.googleapis.com/{{ bucket_name }}/media/{{ file.name }}" target="_blank">{{ file.name }}</a></td>
+                    <td>
+                        <a class="file" href="https://storage.googleapis.com/{{ bucket_name }}/media/{{ file.name }}" target="_blank">{{ file.name }}</a>
+                    </td>
                     <td>{{ file.upload_time }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        <div>
-            <button type="button" id="all_download">全ダウンロード</button>
-        </div>
         <div>
             <a id="upload" href="{% url 'upload' %}">アップロードページに移動</a>
         </div>
