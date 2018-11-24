@@ -4,7 +4,7 @@ from model.models import File, AWS_File
 from google.cloud import storage
 import boto3
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
  
 def list_blobs(bucket_name):
     """Lists all the blobs in the bucket."""
@@ -45,7 +45,8 @@ def upload_object(bucket_name, source_file_name, destination_objcet_name):
     elif ext == 'png' or ext == 'gif':
         content_type = 'image/' + ext
 
-    bucket.upload_file(source_file_name, destination_objcet_name, ExtraArgs={'ACL': 'public-read', 'ContentType': content_type})
+    expires = datetime.now() + timedelta(days=7)
+    bucket.upload_file(source_file_name, destination_objcet_name, ExtraArgs={'ACL': 'public-read', 'ContentType': content_type, 'Expires': expires})
 
 def index(request):
     files = File.objects.all()
