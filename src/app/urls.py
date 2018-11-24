@@ -22,4 +22,9 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('upload/', views.upload, name='upload'),
     path('upload_api/', views.upload_api, name='upload_api'),
+
+    # AWS S3
+    path('aws/', views.aws_index, name='aws_index'),
+    path('aws_upload/', views.aws_upload, name='aws_upload'),
+    path('aws_upload_api/', views.aws_upload_api, name='aws_upload_api'),
 ]

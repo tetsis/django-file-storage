@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Django storage top page (AWS S3)</title>
+        <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+        <!-- <script type="text/javascript" src="{% static 'js/sample.js' %}"></script> -->
+    </head>
+    <body>
+        <h1 id="title">Django storage top page (AWS S3)</h1>
+        <h2>DBリスト</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ファイル名</th>
+                    <th>アップロード日時</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>
+                        <a class="file" href="https://s3-ap-northeast-1.amazonaws.com/{{ bucket_name }}/{{ file.name }}" target="_blank">{{ file.name }}</a>
+                    </td>
+                    <td>{{ file.upload_time }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>S3オブジェクトリスト</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ファイル名</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <td>
+                        <a class="file" href="https://s3-ap-northeast-1.amazonaws.com/{{ bucket_name }}/{{ object }}" target="_blank">{{ object }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <a id="upload" href="{% url 'aws_upload' %}">アップロードページに移動</a>
+        </div>
+    </body>
+</html>

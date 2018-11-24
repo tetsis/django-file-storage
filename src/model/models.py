@@ -9,3 +9,10 @@ class File(models.Model):
  
     def __str__(self):
         return self.name
+
+class AWS_File(models.Model):
+    name = models.CharField(max_length=2048, default="")
+    upload_time = models.DateTimeField(default=None, blank=True, null=True)
+ 
+    def __str__(self):
+        return self.name

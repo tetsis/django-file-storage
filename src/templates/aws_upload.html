@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Django storage upload page (AWS S3)</title>
+        <!-- <link rel="stylesheet" href="{% static 'css/style.css' %}"> -->
+        <!-- <script type="text/javascript" src="{% static 'js/sample.js' %}"></script> -->
+    </head>
+    <body>
+        <h1 id="title">Django storage upload page (AWS S3)</h1>
+        <div>
+            <form id="form_file">
+                <input type="file" id="file" name="file">
+            </form>
+        </div>
+        <div>
+            <button type="button" id="btn_upload">アップロード</button>
+        </div>
+        <div>
+            <a id="index" href="{% url 'aws_index' %}">トップページに移動</a>
+        </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        $("#btn_upload").click(function() {
+            if ($("#file").val() != "") {
+                $("#btn_upload").prop("disabled", true);
+                var formdata = new FormData($("#form_file").get(0));
+                console.log("Upload start");
+
+                $.ajax({
+                    "url": "{% url 'aws_upload_api' %}",
+                    "type": "POST",
+                    "data": formdata,
+                    "cache": false,
+                    "contentType": false,
+                    "processData": false,
+                    "dataType": "html",
+                    "success": function(response) {
+                        var data = response.data;
+                        if (data != "failed") {
+                            console.log("Success: fileupload");
+                            console.log("fileupload: " + JSON.stringify(data));
+                        }
+                        else {
+                            console.log("Failure: fileupload");
+                        }
+
+                        $("#file").val("");
+                        $("#btn_upload").prop("disabled", false);
+                    },
+                    "error": function() {
+                        console.log("Error");
+
+                        $("#file").val("");
+                        $("#btn_upload").prop("disabled", false);
+                    },
+                });
+            }
+        });
+
+        //////////////////////////////////////////
+        //// ajaxによるPOSTリクエストにCSRFトークンを含める処理
+        //// 公式サイトより引用
+        //// http://docs.djangoproject.jp/en/latest/ref/contrib/csrf.html
+        //////////////////////////////////////////
+        jQuery(document).ajaxSend(function(event, xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            function sameOrigin(url) {
+                // url could be relative or scheme relative or absolute
+                var host = document.location.host; // host + port
+                var protocol = document.location.protocol;
+                var sr_origin = '//' + host;
+                var origin = protocol + sr_origin;
+                // Allow absolute or scheme relative URLs to same origin
+                return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                    (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                    // or any other URL that isn't scheme relative or absolute i.e relative.
+                    !(/^(\/\/|http:|https:).*/.test(url));
+            }
+            function safeMethod(method) {
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        });
+    </script>
+</html>
