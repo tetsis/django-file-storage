@@ -46,7 +46,7 @@ def upload_object(bucket_name, source_file_name, destination_objcet_name):
         content_type = 'image/' + ext
 
     expires = datetime.now() + timedelta(days=7)
-    bucket.upload_file(source_file_name, destination_objcet_name, ExtraArgs={'ACL': 'public-read', 'ContentType': content_type, 'Expires': expires})
+    bucket.upload_file(source_file_name, destination_objcet_name, ExtraArgs={'ContentType': content_type, 'Expires': expires})
 
 def index(request):
     files = File.objects.all()

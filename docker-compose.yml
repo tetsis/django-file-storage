@@ -17,13 +17,13 @@ services:
       DATABASE_HOST: postgres
       GOOGLE_APPLICATION_CREDENTIALS: "key/GOOGLE_APPLICATION_CREDENTIALS.json"
       BUCKET_NAME: "testgeisterwork"
-      AWS_BUCKET_NAME: "media.geister.work"
+      AWS_BUCKET_NAME: "test.geister.work"
     depends_on:
       - postgres
     volumes:
       - ./src:/usr/src/django
-      - ./src/key/aws_config:$HOME/.aws/conig
-      - ./src/key/aws_credentials:$HOME/.aws/credentials
+      - ./src/key/aws_config:/root/.aws/conig
+      - ./src/key/aws_credentials:/root/.aws/credentials
     command: gunicorn app.wsgi -b 0.0.0.0:8080
   postgres:
     build: ./postgres
