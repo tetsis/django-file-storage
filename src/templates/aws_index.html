@@ -46,6 +46,24 @@
             {% endfor %}
             </tbody>
         </table>
+
+        <h2>S3オブジェクトリスト (Pre-signed URL)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ファイル名</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for object in object_dict %}
+                <tr>
+                    <td>
+                        <a class="file" href="{{ object.url }}" target="_blank">{{ object.key }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         <div>
             <a id="upload" href="{% url 'aws_upload' %}">アップロードページに移動</a>
         </div>

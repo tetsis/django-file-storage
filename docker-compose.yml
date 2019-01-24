@@ -10,6 +10,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/certs:/etc/pki/nginx/certs
       - ./src/static:/var/www/static
+    restart: always
   django:
     build: ./django
     env_file: ./django/.django_env
@@ -25,11 +26,13 @@ services:
       - ./src/key/aws_config:/root/.aws/conig
       - ./src/key/aws_credentials:/root/.aws/credentials
     command: gunicorn app.wsgi -b 0.0.0.0:8080
+    restart: always
   postgres:
     build: ./postgres
     env_file: ./postgres/.postgres_env
     volumes:
       - pgdata:/var/lib/postgresql/data
     command: 'postgres -c config_file="/etc/postgresql.conf"'
+    restart: always
 volumes:
   pgdata:
