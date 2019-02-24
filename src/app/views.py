@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from model.models import File, AWS_File
 from google.cloud import storage
@@ -45,6 +45,17 @@ def dict_objects(bucket_name, files):
         object_list.append({'key': file.name, 'url': url})
 
     return object_list
+
+def get_presigned_url(bucket_name, key):
+    s3_client = boto3.client('s3', region_name='ap-northeast-1')
+    url = s3_client.generate_presigned_url(
+        ClientMethod = 'get_object',
+        Params = {'Bucket' : bucket_name, 'Key' : key},
+        ExpiresIn = 3600,
+        HttpMethod = 'GET'
+    )
+
+    return url
 
 def upload_object(bucket_name, source_file_name, destination_objcet_name):
     s3 = boto3.resource('s3')
@@ -161,3 +172,9 @@ def aws_upload_api(request):
             return JsonResponse({'data': 'success'})
         except:
             return JsonResponse({'data': 'failed'})
+
+def aws_media(request, file):
+    bucket_name = os.environ.get('AWS_BUCKET_NAME', 'aws_bucket_name')
+    pre_signed_url = get_presigned_url(bucket_name, file)
+
+    return redirect(pre_signed_url)

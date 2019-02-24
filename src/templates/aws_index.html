@@ -55,10 +55,10 @@
                 </tr>
             </thead>
             <tbody>
-            {% for object in object_dict %}
+            {% for file in files %}
                 <tr>
                     <td>
-                        <a class="file" href="{{ object.url }}" target="_blank">{{ object.key }}</a>
+                        <a class="file" href="{% url 'aws_media' file.name %}" target="_blank">{{ file.name }}</a>
                     </td>
                 </tr>
             {% endfor %}

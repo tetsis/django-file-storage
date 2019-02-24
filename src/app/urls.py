@@ -20,6 +20,8 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+
+    # GCP
     path('upload/', views.upload, name='upload'),
     path('upload_api/', views.upload_api, name='upload_api'),
 
@@ -27,4 +29,5 @@ urlpatterns = [
     path('aws/', views.aws_index, name='aws_index'),
     path('aws_upload/', views.aws_upload, name='aws_upload'),
     path('aws_upload_api/', views.aws_upload_api, name='aws_upload_api'),
+    path('media/<str:file>', views.aws_media, name='aws_media'),
 ]
