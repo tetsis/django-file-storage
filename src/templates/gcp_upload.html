@@ -18,7 +18,7 @@
             <button type="button" id="btn_upload">アップロード</button>
         </div>
         <div>
-            <a id="index" href="{% url 'index' %}">トップページに移動</a>
+            <a id="index" href="{% url 'gcp_index' %}">トップページに移動</a>
         </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -30,7 +30,7 @@
                 console.log("Upload start");
 
                 $.ajax({
-                    "url": "{% url 'upload_api' %}",
+                    "url": "{% url 'gcp_upload_api' %}",
                     "type": "POST",
                     "data": formdata,
                     "cache": false,

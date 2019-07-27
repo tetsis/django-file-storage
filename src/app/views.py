@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from model.models import File, AWS_File
+from model.models import GCP_File, AWS_File
 from google.cloud import storage
 import boto3
 import os
@@ -48,8 +48,8 @@ def upload_object(bucket_name, source_file_name, destination_objcet_name):
     expires = datetime.now() + timedelta(days=7)
     bucket.upload_file(source_file_name, destination_objcet_name, ExtraArgs={'ACL': 'public-read', 'ContentType': content_type, 'Expires': expires})
 
-def index(request):
-    files = File.objects.all()
+def gcp_index(request):
+    files = GCP_File.objects.all()
 
     bucket_name = os.environ.get('BUCKET_NAME', 'bucket_name')
     #file_list = list_blobs(bucket_name)
@@ -59,12 +59,12 @@ def index(request):
         #'file_list': file_list,
         'bucket_name': bucket_name,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'gcp_index.html', context)
 
-def upload(request):
-    return render(request, 'upload.html')
+def gcp_upload(request):
+    return render(request, 'gcp_upload.html')
 
-def upload_api(request):
+def gcp_upload_api(request):
     if request.method == 'POST':
         # ファイルを取得
         try:
@@ -87,7 +87,7 @@ def upload_api(request):
             upload_blob(bucket_name, file_path, 'media/' + file_name)
 
             # DBに登録
-            new_file = File(name=file_name, upload_time=datetime.now())
+            new_file = GCP_File(name=file_name, upload_time=datetime.now())
             new_file.save()
 
             # ファイルを削除

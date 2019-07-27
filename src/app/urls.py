@@ -19,9 +19,11 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('upload/', views.upload, name='upload'),
-    path('upload_api/', views.upload_api, name='upload_api'),
+
+    # GCP Cloud Storage
+    path('gcp/', views.gcp_index, name='gcp_index'),
+    path('gcp_upload/', views.gcp_upload, name='gcp_upload'),
+    path('gcp_upload_api/', views.gcp_upload_api, name='gcp_upload_api'),
 
     # AWS S3
     path('aws/', views.aws_index, name='aws_index'),
